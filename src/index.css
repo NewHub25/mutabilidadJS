@@ -1,16 +1,11 @@
 .header_user {
   width: 90vw;
 }
-.nav_user {
-  outline: 1px solid #f0f;
-}
 .article_canvas {
   height: 400px;
   width: 400px;
-  outline: 5px solid #ff0;
 }
 .article_input {
-  outline: 1px solid #0ff;
   display: inherit;
 }
 @media screen and (min-width: 1000px) {
@@ -25,15 +20,13 @@
   height: 36px;
   font-size: 1.5em;
 }
-button:active {
+.btn:active {
   scale: 1.1;
 }
-ion-icon{
+ion-icon {
   pointer-events: none;
 }
 .user_input {
   background: #ddd;
   outline: none;
-  border: none;
-  text-align: center;
 }
