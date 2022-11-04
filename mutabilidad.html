@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUTABILIDAD</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./src/mutabilidad.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body class="bg-dark">
+    <header
+      class="header_user d-flex flex-column flex-lg-row justify-content-around bg-white mx-auto gap-5"
+    >
+      <nav
+        class="nav_user d-flex flex-column flex-md-row flex-lg-column justify-content-around align-items-center gap-3"
+      >
+        <article class="article_canvas">
+          <canvas id="myCanvas1"></canvas>
+        </article>
+        <article class="article_input">
+          <button class="btn btn-primary" data-add="inmutables">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <input class="user_input text-center p-1 rounded-3" id="" placeholder="Agrega un método" />
+        </article>
+      </nav>
+      <nav
+        class="nav_user d-flex flex-column flex-md-row flex-lg-column justify-content-around align-items-center gap-3"
+      >
+        <article class="article_canvas">
+          <canvas id="myCanvas2"></canvas>
+        </article>
+        <article class="article_input">
+          <button class="btn btn-primary" data-add="mutables">
+            <ion-icon name="add"></ion-icon>
+          </button>
+          <input class="user_input text-center p-1 rounded-3" id="" placeholder="Agrega un método" />
+        </article>
+      </nav>
+    </header>
+    <script src="./src/mutabilidad.js"></script>
+    <script
+      type="module"
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+    ></script>
+    <script
+      nomodule
+      src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+    ></script>
+  </body>
+</html>
