@@ -1,3 +1,6 @@
+import Chart from "chart.js/auto";
+import './index.css'
+
 const inmutables = [
   "replace",
   "join",
@@ -45,6 +48,18 @@ const dataInmutables = {
     },
   ],
 };
+const dataMutables = {
+  labels: mutables,
+  datasets: [
+    {
+      label: "mutables",
+      data: Array(mutables.length).fill(1),
+      backgroundColor: Array(mutables.length)
+        .fill(1)
+        .map((l) => colorRandomLight()),
+    },
+  ],
+};
 const configInmutable = {
   type: "doughnut",
   data: dataInmutables,
@@ -61,18 +76,6 @@ const configInmutable = {
     },
     cutout: "30%",
   },
-};
-const dataMutables = {
-  labels: mutables,
-  datasets: [
-    {
-      label: "mutables",
-      data: Array(mutables.length).fill(1),
-      backgroundColor: Array(mutables.length)
-        .fill(1)
-        .map((l) => colorRandomLight()),
-    },
-  ],
 };
 const configMutable = {
   type: "doughnut",

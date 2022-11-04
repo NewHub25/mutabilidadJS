@@ -11,8 +11,6 @@
       integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
       crossorigin="anonymous"
     />
-    <link rel="stylesheet" href="./src/mutabilidad.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body class="bg-dark">
     <header
@@ -25,7 +23,7 @@
           <canvas id="myCanvas1"></canvas>
         </article>
         <article class="article_input">
-          <button class="btn btn-primary" data-add="inmutables">
+          <button class="btn btn-warning" data-add="inmutables">
             <ion-icon name="add"></ion-icon>
           </button>
           <input class="user_input text-center p-1 rounded-3" id="" placeholder="Agrega un método" />
@@ -38,14 +36,13 @@
           <canvas id="myCanvas2"></canvas>
         </article>
         <article class="article_input">
-          <button class="btn btn-primary" data-add="mutables">
+          <button class="btn btn-warning" data-add="mutables">
             <ion-icon name="add"></ion-icon>
           </button>
           <input class="user_input text-center p-1 rounded-3" id="" placeholder="Agrega un método" />
         </article>
       </nav>
     </header>
-    <script src="./src/mutabilidad.js"></script>
     <script
       type="module"
       src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
