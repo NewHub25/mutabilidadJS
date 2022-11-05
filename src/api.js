@@ -1,13 +1,7 @@
-document.querySelector(".header_user").addEventListener("click", (e) => {
-  const DOMData = e.target.dataset;
-  const next = e.target.nextElementSibling;
-  if (DOMData.add && /^[a-zA-Z]+$/.test(next.value)) {
-    if (box.data[DOMData.add].some((l) => l === next.value)) {
-      alert(`Tal método ya existe 🙄:\n**${next.value}** 😱`);
-    } else {
-      box.data[DOMData.add].push(next.value);
-      box.charts[DOMData.add].update();
-    }
-  }
-  if (next) next.value = ""; // Si existe un hermano se le borra su "value"
-});
+export function getMethod(type) {
+  return fetch(`https://633fcc2ad1fcddf69ca9ca98.mockapi.io/${type}`)
+    .then(r => r.json())
+    .then(r => {
+        return r.map(d => d.name);
+    })
+}
