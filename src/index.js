@@ -1,131 +1,65 @@
 import Chart from "chart.js/auto";
-import { getMethod } from "./api";
+import { getArrayApi, colorRandomLight, postApi } from "./stored";
 import "./index.css";
 
-const inmutables = [
-  "replace",
-  "join",
-  "split",
-  "slice",
-  "toString",
-  "substring",
-  "concat",
-  "flat",
-  "padStart",
-  "padEnd",
-  "map",
-  "reduce",
-  "filter",
-  "trim",
-  "repeat",
-].sort();
-const mutables = [
-  "unshift",
-  "shift",
-  "pop",
-  "splice",
-  "fill",
-  "copyWithin",
-  "sort",
-  "length",
-].sort();
-
-function colorRandomLight() {
-  const random = () => Math.floor(Math.random() * 155) + 100;
-  const r = random().toString(16);
-  const g = random().toString(16);
-  const b = random().toString(16);
-  return "#" + r + g + b;
+async function crearChart(canvasID, type) {
+  const array = await getArrayApi(type);
+  const _data = {
+    labels: array,
+    datasets: [
+      {
+        label: type,
+        data: Array(array.length).fill(1),
+        backgroundColor: Array(array.length)
+          .fill("")
+          .map((l) => colorRandomLight()),
+      },
+    ],
+  };
+  const _config = {
+    type: "doughnut",
+    data: _data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "left",
+        },
+        title: {
+          display: true,
+          text: "Métodos " + type,
+        },
+      },
+      cutout: "40%",
+    },
+  };
+  return new Chart(document.getElementById(canvasID), _config);
 }
+const myChart1 = crearChart("myCanvas1", "inmutables");
+const myChart2 = crearChart("myCanvas2", "mutables");
 
-const dataInmutables = {
-  labels: inmutables,
-  datasets: [
-    {
-      label: "inmutables", //?
-      data: Array(inmutables.length).fill(1),
-      backgroundColor: Array(inmutables.length)
-        .fill(1)
-        .map((l) => colorRandomLight()),
-    },
-  ],
-};
-const dataMutables = {
-  labels: mutables,
-  datasets: [
-    {
-      label: "mutables",
-      data: Array(mutables.length).fill(1),
-      backgroundColor: Array(mutables.length)
-        .fill(1)
-        .map((l) => colorRandomLight()),
-    },
-  ],
-};
-const configInmutable = {
-  type: "doughnut",
-  data: dataInmutables,
-  options: {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "left",
-      },
-      title: {
-        display: true,
-        text: "Métodos inmutables",
-      },
-    },
-    cutout: "30%",
-  },
-};
-const configMutable = {
-  type: "doughnut",
-  data: dataMutables,
-  options: {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "right",
-      },
-      title: {
-        display: true,
-        text: "Métodos mutables",
-      },
-    },
-    cutout: "50%",
-  },
-};
-const myChart1 = new Chart(
-  document.getElementById("myCanvas1"),
-  configInmutable
-);
-const myChart2 = new Chart(document.getElementById("myCanvas2"), configMutable);
-
-// const BUTTONS = document.querySelectorAll('[data-add]');
-// const INPUTS = document.querySelectorAll(".user_input");
-const box = {
-  data: {
-    inmutables: inmutables,
-    mutables: mutables,
-  },
-  charts: {
-    inmutables: myChart1,
-    mutables: myChart2,
-  },
-};
-
-document.querySelector(".header_user").addEventListener("click", (e) => {
-  const DOMData = e.target.dataset;
-  const next = e.target.nextElementSibling;
-  if (DOMData.add && /^[a-zA-Z]+$/.test(next.value)) {
-    if (box.data[DOMData.add].some((l) => l === next.value)) {
-      alert(`Tal método ya existe 🙄:\n**${next.value}** 😱`);
-    } else {
-      box.data[DOMData.add].push(next.value);
-      box.charts[DOMData.add].data.datasets[0].data.push(1);
-      box.charts[DOMData.add].update();
+async function loadAddEvent() {
+  const box = {};
+  box.inmutables = await myChart1;
+  box.mutables = await myChart2;
+  
+  document.querySelector(".header_user").addEventListener("click", (e) => {
+    const targetDataset = e.target.dataset;
+    const next = e.target.nextElementSibling;
+    if (targetDataset.add && /^[a-zA-Z]+$/.test(next.value)) {
+      if (box[targetDataset.add].data.labels.some((l) => l === next.value)) {
+        alert(`Tal método ya existe 🙄:\n**${next.value}** 😱`);
+      } else {
+        postApi(targetDataset.add, next.value).then(async (r) => {
+          box[targetDataset.add].data.labels = await getArrayApi(
+            targetDataset.add
+          );
+          box[targetDataset.add].data.datasets[0].data.push(1);
+          box[targetDataset.add].update();
+        });
+      }
     }
-  }
-  if (next) next.value = ""; // Si existe un hermano se le borra su "value"
-});
+    if (next) next.value = ""; // Si existe un hermano se le borra su "value"
+  });
+}
+loadAddEvent();
