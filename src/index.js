@@ -1,18 +1,19 @@
 import Chart from "chart.js/auto";
-import { getArrayApi, colorRandomLight, postApi } from "./stored";
+import { getArrayApi, postApi } from "./stored";
+import { colorName } from "./coloresHtml";
 import "./index.css";
 
 async function crearChart(canvasID, type) {
   const array = await getArrayApi(type);
   const _data = {
-    labels: array,
+    labels: array.sort(),
     datasets: [
       {
         label: type,
         data: Array(array.length).fill(1),
         backgroundColor: Array(array.length)
           .fill("")
-          .map((l) => colorRandomLight()),
+          .map((l) => colorName()),
       },
     ],
   };
@@ -42,7 +43,7 @@ async function loadAddEvent() {
   const box = {};
   box.inmutables = await myChart1;
   box.mutables = await myChart2;
-  
+
   document.querySelector(".header_user").addEventListener("click", (e) => {
     const targetDataset = e.target.dataset;
     const next = e.target.nextElementSibling;
@@ -50,11 +51,14 @@ async function loadAddEvent() {
       if (box[targetDataset.add].data.labels.some((l) => l === next.value)) {
         alert(`Tal método ya existe 🙄:\n**${next.value}** 😱`);
       } else {
-        postApi(targetDataset.add, next.value).then(async (r) => {
+        postApi(targetDataset.add, next.value).then(async () => {
           box[targetDataset.add].data.labels = await getArrayApi(
             targetDataset.add
           );
           box[targetDataset.add].data.datasets[0].data.push(1);
+          box[targetDataset.add].data.datasets[0].backgroundColor.push(
+            colorName()
+          );
           box[targetDataset.add].update();
         });
       }

@@ -29,11 +29,3 @@ export function postApi(type, method) {
     })
     .catch((e) => console.error(e));
 }
-
-export function colorRandomLight() {
-  const random = () => Math.floor(Math.random() * 155) + 100;
-  const r = random().toString(16);
-  const g = random().toString(16);
-  const b = random().toString(16);
-  return "#" + r + g + b;
-}
