@@ -1,9 +1,10 @@
 import Chart from "chart.js/auto";
-import { getArrayApi, postApi } from "./stored";
+import { getArrayApi, postApi, createNavContainer } from "./stored";
 import { colorName } from "./coloresHtml";
 import "./index.css";
 
-async function crearChart(canvasID, type) {
+const HEADER_USER = document.querySelector(".header_user");
+async function crearChart(type) {
   const array = await getArrayApi(type);
   const _data = {
     labels: array.sort(),
@@ -28,42 +29,52 @@ async function crearChart(canvasID, type) {
         },
         title: {
           display: true,
-          text: "Métodos " + type,
+          text: "Métodos y propiedades tipo: " + type,
         },
       },
       cutout: "40%",
     },
   };
-  return new Chart(document.getElementById(canvasID), _config);
+  return new Chart(document.getElementById(type), _config);
 }
-const myChart1 = crearChart("myCanvas1", "inmutables");
-const myChart2 = crearChart("myCanvas2", "mutables");
 
-async function loadAddEvent() {
-  const box = {};
-  box.inmutables = await myChart1;
-  box.mutables = await myChart2;
+async function loadAddEvent(...types) {
+  HEADER_USER.innerHTML = "";
+  const chartHandler = {};
+  for (let i = 0; i < types.length; i++) {
+    HEADER_USER.innerHTML += createNavContainer(types[i]);
+  }
+  for (let j = 0; j < types.length; j++) {
+    chartHandler[types[j]] = await crearChart(types[j]);
+  }
+  /*
+    Buena práctica separar la lógica del HTML y las promesas, puesto que si no hay un orden, no habrá un lienzo donde dibujar los datos en ese milisegundo de momento
+  */
+  // box.inmutables = await crearChart("myCanvas1", "inmutables");
+  // box.mutables = await crearChart("myCanvas1", "mutables");
 
-  document.querySelector(".header_user").addEventListener("click", (e) => {
+  HEADER_USER.addEventListener("click", (e) => {
     const targetDataset = e.target.dataset;
     const next = e.target.nextElementSibling;
     if (targetDataset.add && /^[a-zA-Z]+$/.test(next.value)) {
-      if (box[targetDataset.add].data.labels.some((l) => l === next.value)) {
-        alert(`Tal método ya existe 🙄:\n**${next.value}** 😱`);
+      // Se verifica arriba la entrada del respectivo input
+      if (chartHandler[targetDataset.add].data.labels.some((l) => l === next.value)) {
+        alert(`Tal propiedad ya existe 🙄:\n**${next.value}** 😱`);
       } else {
         postApi(targetDataset.add, next.value).then(async () => {
-          box[targetDataset.add].data.labels = await getArrayApi(
+          chartHandler[targetDataset.add].data.labels = await getArrayApi(
             targetDataset.add
           );
-          box[targetDataset.add].data.datasets[0].data.push(1);
-          box[targetDataset.add].data.datasets[0].backgroundColor.push(
+          chartHandler[targetDataset.add].data.datasets[0].data.push(1);
+          chartHandler[targetDataset.add].data.datasets[0].backgroundColor.push(
             colorName()
           );
-          box[targetDataset.add].update();
+          chartHandler[targetDataset.add].update();
         });
       }
     }
     if (next) next.value = ""; // Si existe un hermano se le borra su "value"
   });
 }
-loadAddEvent();
+loadAddEvent("inmutables", "mutables", "booleanos");
+// loadAddEvent("inmutables");

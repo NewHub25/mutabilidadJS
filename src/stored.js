@@ -29,3 +29,23 @@ export function postApi(type, method) {
     })
     .catch((e) => console.error(e));
 }
+
+export function createNavContainer(typeID) {
+  return `
+<nav class="nav_user d-flex flex-column flex-md-row flex-lg-column justify-content-around align-items-center gap-3 my-3">
+  <article class="article_canvas">
+    <canvas id="${typeID}"></canvas>
+  </article>
+  <article class="article_input gap-2">
+    <button class="btn btn-primary" data-add="${typeID}">
+      <ion-icon name="add"></ion-icon>
+    </button>
+    <input
+      class="user_input text-center p-1 rounded-3 border-0"
+      id=""
+      placeholder="Agrega una propiedad"
+    />
+  </article>
+</nav>;
+`
+}

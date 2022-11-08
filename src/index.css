@@ -1,6 +1,7 @@
 .header_user {
   width: 90vw;
   min-height: 100vh;
+  flex-wrap: wrap;
 }
 .article_canvas {
   height: 400px;
